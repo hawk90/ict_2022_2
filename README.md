@@ -8,3 +8,6 @@
 >   - Formatter: Black
 >   - Linter: Pylint
 >   - LSP: Pyright
+
+### Tensorflow
+> Version: 2.8
