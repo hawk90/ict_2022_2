@@ -6,22 +6,8 @@ from tensorflow.keras import Model
 from tensorflow.keras.layers import Input, Dense, Concatenate
 from tensorflow.keras.optimizers import SGD
 
-class WideAndDeepModel(Model):
-    def __init__(self, units=30, activation="relu", **kwargs):
-        super().__init__(**kwargs)
-        self.hidden1 = Dense(units, activation=activation)
-        self.hidden2 = Dense(units, activation=activation)
-        self.main_output = Dense(1)
-        self.aux_output = Dense(1)
+from  model_wideanddeep import WideAndDeepModel
 
-    def call(self, inputs):
-        input_a, input_b = inputs
-        hidden1 = self.hidden1(input_b)
-        hidden2 = self.hidden2(hidden1)
-        concat = Concatenate()([input_a, input_b])
-        main_output = self.main_output(concat)
-        aux_output = self.aux_output(hidden2)
-        return main_output, aux_output
 
 # 01_Data Load
 housing = fetch_california_housing()
@@ -43,6 +29,7 @@ x_test_a, x_test_b = x_test[:, :5], x_test[:, 2:]
 
 # 02_Model
 model = WideAndDeepModel()
+
 
 
 # 03_Model Compile

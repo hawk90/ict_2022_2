@@ -18,10 +18,20 @@ model.add(Dense(10, activation="softmax"))
 model.summary()
 
 # 04_Handling Model
+
 print(model.layers)
+
+print("Model Layers Name")
+print("*"*50)
+layer_names = [layer.name for layer in model.layers]
+print(layer_names)
+print("*"*50)
 
 hidden1 = model.layers[1]
 print(hidden1.name)
+
+
+
 
 print(model.get_layer('dense') is hidden1)
 
