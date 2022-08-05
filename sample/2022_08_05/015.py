@@ -1,8 +1,12 @@
 #-*- coding:utf-8 -*-
+
 import os  
 import cv2 
 
-IMG_PATH = "../images"
+
+IMG_PATH = "../../Lecture_code/5ÀÏÂ÷/images" 
+#IMG_PATH = "../images"
+
 IMG_SAVE_PATH = "../saveimages"
 
 #TODO 
