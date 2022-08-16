@@ -1,11 +1,12 @@
 from tensorflow.keras.datasets import cifar10
 from tensorflow.keras.layers import Conv2D, Dense, Flatten, MaxPool2D
-from tensorflow.keras.losses import categorical_crossentropy
+from tensorflow.keras.losses import SparseCategoricalCrossentropy
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.optimizers import Adam
 
 # TODO: Data Load
-(x_train, y_train), (x_test, y_test) = cifar10.load_data()
+(train_images, train_labels), (test_images, test_labels) = cifar10.load_data()
+
 
 # TODO: Define Model
 model = Sequential()
@@ -50,17 +51,13 @@ model.add(MaxPool2D(pool_size=(2, 2), strides=(2, 2)))
 model.add(Flatten())
 model.add(Dense(units=4096, activation="relu"))
 model.add(Dense(units=4096, activation="relu"))
-model.add(Dense(units=10, activation="softmax"))
+model.add(Dense(units=10))
 
 # TODO: Config Train Env
 opt = Adam(lr=0.001)
-model.compile(optimizer=opt, loss=categorical_crossentropy, metrics=["accuracy"])
+model.compile(optimizer=opt, loss=SparseCategoricalCrossentropy(from_logits=True), metrics=["accuracy"])
 
-# model.summary()
+model.summary()
 
 # TODO: Training
-hist = model.fit(
-    x_train,
-    y_train,
-    epochs=100,
-)
+hist = model.fit(train_images, train_labels, epochs=100)
