@@ -55,7 +55,11 @@ model.add(Dense(units=10))
 
 # TODO: Config Train Env
 opt = Adam(lr=0.001)
-model.compile(optimizer=opt, loss=SparseCategoricalCrossentropy(from_logits=True), metrics=["accuracy"])
+model.compile(
+    optimizer=opt,
+    loss=SparseCategoricalCrossentropy(from_logits=True),
+    metrics=["accuracy"],
+)
 
 model.summary()
 
