@@ -1,8 +1,15 @@
 import tensorflow as tf
 from tensorflow.keras import Model
 from tensorflow.keras.layers import (BatchNormalization, Conv2D, Dense,
-                                     Dropout, GlobalAveragePooling2D, Layer)
+                                     DepthwiseConv2D, Dropout,
+                                     GlobalAveragePooling2D, Layer)
 
+class SE(Layer):
+    def __init__(self, **kwargs):
+        pass
+
+    def call(self, inputs):
+        pass
 
 class MBCov1(Layer):
     def __init__(self, **kwargs):
