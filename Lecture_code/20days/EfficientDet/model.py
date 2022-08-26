@@ -1,9 +1,11 @@
+from math import ceil
+
 import tensorflow as tf
-from tensorflow.kears.activats import relu
 from tensorflow.keras import Model
 from tensorflow.keras.layers import (BatchNormalization, Conv2D, Dense,
                                      DepthwiseConv2D, Dropout,
-                                     GlobalAveragePooling2D, Layer, Reshape)
+                                     GlobalAveragePooling2D, Layer, Multiply,
+                                     ReLU, Reshape)
 
 
 class Swish(Layer):
@@ -11,22 +13,24 @@ class Swish(Layer):
         pass
 
     def call(self, x):
-        return x * relu(x + 3) / 6
+        return x * ReLU()(x + 3) / 6
 
 
 class SE(Layer):
-    def __init__(self, filters, **kwargs):
+    def __init__(self, filters, reduction_ratio=4, **kwargs):
         self.filters = filters
-        pass
+        self.reduction_ratio = reduction_ratio
+        self.se_filters = max(1, int(filters / reduction_ratio))
 
     def call(self, inputs):
-        x = GlobalAveragePooling2D()(inputs)
-        x = Reshape(1, 1, self.filters)(x)
-        x = Conv2D((1, 1, self.filters), strides=1, activation="relu", padding="same")(
-            x
-        )
+        # in dims = [batch, H, W, channels]
+        # out dims = [batch, 1, 1, channels]        @GlobalAveragePooling2D
+        # out dims = [batch, 1, 1, channels/ratio]  @Conv2D_1
+        # out dims = [batch, 1, 1, channels]        @COnv2D_2
+        x = GlobalAveragePooling2D(inputs, keepdims=True)(inputs)
+        x = Conv2D(self.se_filters, strides=1, activation="relu", padding="same")(x)
         x = Conv2D(self.filters, strides=1, activation="sigmoid", paddig="same")(x)
-        pass
+        return Multiply()([inputs, x])
 
 
 class MBCov1(Layer):
@@ -43,18 +47,34 @@ class MBCov1(Layer):
 
 
 class MBCov6(Layer):
-    def __init__(self, **kwargs):
-        pass
+    def __init__(self, filters_in, filters_out, kernel_size, strides=1, **kwargs):
+        self.filters = filters_in * 6
+        self.filters_out = filters_out
+        self.strides = strides
+        self.kernel_size = kernel_size
+        self.padding = "valid" if strides == 2 else "same"
 
     def call(self, inputs):
-        x = Conv2D()(inputs)
-        x = Swish()(x)
+        # NOTE: Layer에 필요한 args(filters, kernel_size, strides, padding)
+        # NOTE: filters == channel of out_dims
+        # NOTE: ((W - k + 2P) / S) + 1
+        # NOTE: W: width, k: kernel size, P: padding, S: stride
+
+        # in dims = [batch, H, W, filters_in]
+        # out dims = [batch, H/s, W/s, filters_out]
+        x = Conv2D(self.filters, kernel_size=(1, 1), strides=1, padding="same")(inputs)
         x = BatchNormalization()(x)
-        x = DepthwiseConv2D()(x)
+        x = Swish()(x)
+        x = DepthwiseConv2D(
+            self.filters,
+            kernel_size=self.kernel_size,
+            strides=self.strides,
+            padding=self.padding,
+        )(x)
         x = BatchNormalization()(x)
         x = Swish()(x)
-        x = SE()(x)
-        x = Conv2D()(x)
+        x = SE(self.filters)(x)
+        x = Conv2D(self.filters_out, kernel_size=(1, 1), strides=1, padding="same")(x)
         return BatchNormalization()(x)
 
 
