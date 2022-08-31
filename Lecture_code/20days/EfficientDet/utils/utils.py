@@ -1,3 +1,5 @@
+import logging
+
 import cv2
 
 WINDOW_TITLE = "Show Image"
@@ -20,3 +22,23 @@ class BBox:
             start, end = coord
             img = cv2.rectangle(img, start, end, self.color, self.thickness)
         show_img(img)
+
+
+class Logger:
+    def __init__(self, level=logging.ERROR):
+        # NOTE: CRITICAL    (level high)
+        # NOTE: ERROR
+        # NOTE: WARNING
+        # NOTE: INFO
+        # NOTE: DEBUG       (level low)
+
+        self.logger = logging.getLogger()
+
+        self.logger.setLevel(logging.INFO)
+        fmt = logging.Formatter("[%(levelname)s] - %(message)s")
+        stream_handler = logging.StreamHandler()
+        stream_handler.setFormatter(fmt)
+        self.logger.addHandler(stream_handler)
+
+    def get_logger(self):
+        return self.logger
