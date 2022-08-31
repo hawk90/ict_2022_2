@@ -15,7 +15,8 @@ class BBox:
         self.color = color
         self.thickness = thickness
 
-    def show(self, img, coordinate):
-        start, end = coordinate
-        img = cv2.rectangle(img, start, end, self.color, self.thickness)
+    def show(self, img, coordinates):
+        for coord in coordinates:
+            start, end = coord
+            img = cv2.rectangle(img, start, end, self.color, self.thickness)
         show_img(img)
