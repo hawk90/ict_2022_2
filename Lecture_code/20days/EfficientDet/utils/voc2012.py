@@ -1,4 +1,7 @@
+import os
+import random
 import xml.etree.ElementTree as ET
+from glob import glob
 
 import cv2
 from utils import BBox
@@ -40,11 +43,18 @@ class VOC:
         tree = ET.parse(self.annotations_dir + xml_name)
         return tree.getroot()
 
+    def bbox_example(self, nums=10, shufle=True):
+        bbox = BBox()
+        globs = glob(self.annotations_dir + "*.xml")
+
+        for _ in range(nums):
+            fname = random.choice(globs)
+            fname = os.path.basename(fname)
+            img, bboxs = voc.img_n_bbox(fname)
+
+            bbox.show(img, bboxs)
+
 
 if __name__ == "__main__":
     voc = VOC(ROOT_DIR)
-    bbox = BBox()
-
-    img, bboxs = voc.img_n_bbox("2007_000032.xml")
-
-    bbox.show(img, bboxs)
+    voc.bbox_example()
