@@ -1,8 +1,8 @@
 import tensorflow as tf
 from tensorflow.keras import Model
 from tensorflow.keras.layers import (BatchNormalization, Conv2D, Dense,
-                                     Dropout, GlobalAveragePooling2D,
-                                     Layer, MaxPool2D)
+                                     Dropout, GlobalAveragePooling2D, Layer,
+                                     MaxPool2D)
 
 
 class Stem(Layer):
