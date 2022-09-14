@@ -35,3 +35,17 @@ class DisplayCallback(tf.keras.callbacks.Callback):
     def on_epoch_end(self, epoch, logs=None):
         clear_output(wait=True)
         show_predictions()
+
+
+def display_losses(losses, epochs):
+    loss, val_loss = losses
+
+    plt.figure()
+    plt.title("Losses")
+    plt.xlabel("Epoch")
+    plt.ylabel("Loss Value")
+
+    plt.plot(epochs, loss, "r")
+    plt.plot(epochs, val_loss, "g")
+
+    plt.show()
