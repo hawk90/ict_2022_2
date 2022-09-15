@@ -1,6 +1,5 @@
 import matplotlib.pyplot as plt
 import tensorflow as tf
-
 from IPython.display import clear_output
 
 TITLE = ["input", "true", "predicted"]

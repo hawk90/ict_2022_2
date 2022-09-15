@@ -18,12 +18,12 @@ class Dataloader:
 
     def _load_train(self, data):
         img = tf.image.resize(data["image"], RESIZE)
-        mask = tf.image.resize(data["segementation_mask"], RESIZE)
+        mask = tf.image.resize(data["segmentation_mask"], RESIZE)
         return self._normalize(img, mask)
 
     def _load_test(self, data):
         img = tf.image.resize(data["image"], RESIZE)
-        mask = tf.image.resize(data["segementation_mask"], RESIZE)
+        mask = tf.image.resize(data["segmentation_mask"], RESIZE)
         return self._normalize(img, mask)
 
     @property
@@ -33,3 +33,7 @@ class Dataloader:
     @property
     def test(self):
         return self.dataset["test"].map(self._load_test)
+
+    @property
+    def num_train(self):
+        return self.info.splits["train"].num_examples
