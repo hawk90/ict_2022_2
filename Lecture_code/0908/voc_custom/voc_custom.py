@@ -66,7 +66,7 @@ class VocCustom(tfds.core.GeneratorBasedBuilder):
         }
 
     def _generate_objects(self, fname):
-    
+
         tree = ET.parse(os.path.join(_ANNOTATION_DIR, fname))
         xml = tree.getroot()
 
@@ -76,7 +76,7 @@ class VocCustom(tfds.core.GeneratorBasedBuilder):
             ymax, xmax = int(bbox.findtext("ymax")), int(bbox.findtext("xmax"))
             Bbox = namedtuple("ymin", "xmin", "ymax", "xmax")
             yield {
-                "bbox": Bbox(ymin, xmin, ymax, ymax),
+                "bbox": Bbox(ymin, xmin, ymax, xmax),
                 "label": obj.findtext("label"),
             }
 
@@ -84,6 +84,7 @@ class VocCustom(tfds.core.GeneratorBasedBuilder):
         for fname in filenames:
             yield {
                 'image': os.path.join(_IMG_DIR, fname + ".jpg"),
-                'segmentation_image': os.path.join(_SEG_IMG_DIR, fname + ".jpg"),
+                'segmentation_image': os.path.join(_SEG_IMG_DIR,
+                                                   fname + ".jpg"),
                 'objects': self._generate_objects(fname)
             }
