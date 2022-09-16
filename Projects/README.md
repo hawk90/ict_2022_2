@@ -1,8 +1,12 @@
 # Project
 
-Dataset:[AIHUB](https://aihub.or.kr/) or [Kaggle](https://www.kaggle.com/)
+  
+Dataset:[AIHUB](https://aihub.or.kr/) or [Kaggle](https://www.kaggle.com/)  
+기간: 9월 16일 ~ 9월 23일  
+발표: 9월 26일  
+  
 
-
+------
 ### 기태균  
  -
  -
